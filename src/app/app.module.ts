@@ -12,18 +12,23 @@ import {metaReducers, reducers,} from "./redux/reducer";
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { EffectsModule } from '@ngrx/effects';
+import { FormComponent } from './form/form.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 const appModule:Routes=[
   {path: '**', component: AppComponent}
 ]
 @NgModule({
   declarations: [
     AppComponent,
-    TableComponent
+    TableComponent,
+    FormComponent
   ],
   imports: [
     CommonModule,
     BrowserModule,
     NgbModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(appModule),
     StoreModule.forRoot(reducers, {
       metaReducers,
