@@ -10,12 +10,14 @@ import { environment } from '../environments/environment';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import {metaReducers, reducers,} from "./redux/reducer";
 import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     NgbModule,
     RouterModule.forRoot([]),
@@ -28,6 +30,7 @@ import { RouterModule, Routes } from '@angular/router';
     }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     StoreRouterConnectingModule.forRoot()
+
   ],
   providers: [],
   bootstrap: [AppComponent]
