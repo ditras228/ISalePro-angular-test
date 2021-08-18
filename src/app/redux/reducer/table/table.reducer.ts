@@ -1,10 +1,11 @@
 import {iUser} from "../../../table/user";
-import {MetaReducer} from "@ngrx/store";
 
 export const tableNode= 'table'
+
 export interface TableState{
   users: iUser[]
 }
+
 const initialState: TableState={
   users: [
     {
@@ -39,6 +40,7 @@ const initialState: TableState={
   ]
 }
 export const tableReducer = (state = initialState, action: any)=>{
-
-  return state
+  switch (action.type){
+    default:  return state
+  }
 }

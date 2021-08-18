@@ -1,15 +1,24 @@
 <table class="table table-striped">
   <thead>
   <tr>
-    <th scope="col">#</th>
-    <th scope="col">Country</th>
-    <th scope="col">Area</th>
-    <th scope="col">Population</th>
+    <th scope="col">id</th>
+    <th scope="col">firstName</th>
+    <th scope="col">lastName</th>
+    <th scope="col">email</th>
+    <th scope="col">phone</th>
+    <th scope="col">address</th>
+    <th scope="col">description</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let user of users$ | async ; index as i">
-    <td>{{ user }}</td>
+    <td>{{user.id}}</td>
+    <td>{{user.firstName}}</td>
+    <td>{{user.lastName}}</td>
+    <td>{{user.email}}</td>
+    <td>{{user.phone}}</td>
+    <td>{{user.address}}</td>
+    <td>{{user.description}}</td>
   </tr>
   </tbody>
 </table>

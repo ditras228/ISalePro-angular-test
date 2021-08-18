@@ -11,6 +11,10 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import {metaReducers, reducers,} from "./redux/reducer";
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { EffectsModule } from '@ngrx/effects';
+const appModule:Routes=[
+  {path: '**', component: AppComponent}
+]
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +24,7 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     BrowserModule,
     NgbModule,
-    RouterModule.forRoot([]),
+    RouterModule.forRoot(appModule),
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks:{
@@ -29,8 +33,7 @@ import { CommonModule } from '@angular/common';
       }
     }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    StoreRouterConnectingModule.forRoot()
-
+    StoreRouterConnectingModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -6,5 +6,5 @@ export const selectTableFeature=createFeatureSelector<TableState>(tableNode)
 
 export const selectUsers =createSelector(
     selectTableFeature,
-  ()=>(state: TableState): iUser[]=>state.users
+    (state: TableState): iUser[]=>state.users
 )
