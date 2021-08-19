@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { EffectsModule } from '@ngrx/effects';
 import { FormComponent } from './form/form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ModalComponent } from './modal/modal.component';
 const appModule:Routes=[
   {path: '**', component: AppComponent}
 ]
@@ -21,7 +22,8 @@ const appModule:Routes=[
   declarations: [
     AppComponent,
     TableComponent,
-    FormComponent
+    FormComponent,
+    ModalComponent
   ],
   imports: [
     CommonModule,
