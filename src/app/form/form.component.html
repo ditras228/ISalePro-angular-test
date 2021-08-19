@@ -3,16 +3,39 @@
 <form #userForm>
   <div class="form-group">
     <label for="id">id</label>
-    <input id="id" type="text" #firstName='ngModel' [(ngModel)]="user.firstName" name="firstName"  class="form-control" required >
-    <div [hidden]="firstName.valid || !firstName.touched" class="alert alert-danger">12312</div>
+    <input id="id" type="number" #id='ngModel' [(ngModel)]="user.id" name="id"  class="form-control" required >
+    <div [hidden]="id.valid || !id.touched" class="alert alert-danger">Обязательно</div>
   </div>
+
   <div class="form-group">
     <label for="firstName">firstName</label>
-    <input id="firstName" type="text"  class="form-control" required >
+    <input id="firstName" type="text" #firstName='ngModel' [(ngModel)]="user.firstName" name="firstName"  class="form-control" required >
+    <div [hidden]="firstName.valid || !firstName.touched" class="alert alert-danger">Обязательно</div>
   </div>
+
   <div class="form-group">
     <label for="lastName">lastName</label>
-    <input id="lastName" type="text" class="form-control"required >
+    <input id="lastName" type="text" #lastName='ngModel' [(ngModel)]="user.lastName" name="lastName"  class="form-control" required >
+    <div [hidden]="lastName.valid || !lastName.touched" class="alert alert-danger">Обязательно</div>
   </div>
+
+  <div class="form-group">
+    <label for="email">email</label>
+    <input id="email" type="email" #email='ngModel' [(ngModel)]="user.email" name="email"  class="form-control" required >
+    <div [hidden]="email.valid || !email.touched" class="alert alert-danger">Обязательно</div>
+  </div>
+
+  <div class="form-group">
+    <label for="phone">phone</label>
+    <input id="phone" type="number" #phone='ngModel' [(ngModel)]="user.phone" name="phone"  class="form-control" required >
+    <div [hidden]="phone.valid || !phone.touched" class="alert alert-danger">Обязательно</div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">description</label>
+    <input id="description" type="text" #description='ngModel' [(ngModel)]="user.description" name="description"  class="form-control" required >
+    <div [hidden]="description.valid || !description.touched" class="alert alert-danger">Обязательно</div>
+  </div>
+
   <button type="submit" (click)="submitFormHandler(); userForm.reset()" class="btn btn-success">submit</button>
 </form>

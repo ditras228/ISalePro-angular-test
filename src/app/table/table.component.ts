@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {select, Store} from "@ngrx/store";
 import {selectUsers} from "../redux/reducer/table/table.selectors";
@@ -10,12 +10,10 @@ import {iUser} from "./user";
   templateUrl: './table.component.html'
 })
 export class TableComponent implements OnInit {
-  //public users$:Observable<iUser[]>=this.store$.pipe(select(state=>state.users))
-  constructor(private store$: Store<TableState>) {
-
-  }
   public users$:Observable<iUser[]>=this.store$.pipe(select(selectUsers))
 
+  constructor(private store$: Store<TableState>) {
+  }
   ngOnInit(): void {
   }
 

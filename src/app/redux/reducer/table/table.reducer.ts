@@ -1,46 +1,52 @@
-import {iUser} from "../../../table/user";
+import {TableActions} from "./table.actions";
 
-export const tableNode= 'table'
+export const tableNode = 'table'
 
-export interface TableState{
-  users: iUser[]
+export interface TableState {
+  tableData: [],
+  sortDirection: '',
+  sortKey: ''
 }
 
-const initialState: TableState={
-  users: [
-    {
-      id: 1,
-      firstName: 'Sue',
-      lastName: 'Corson',
-      email: 'DWhalley@in.gov',
-      phone: '(612)211-6296',
-      address: {
-        streetAddress: '9792 Mattis Ct',
-        city: 'Waukesha',
-        state: 'WI',
-        zip: '22178'
-      },
-      description: 'et lacus magna dolor...',
-    },
-    {
-      id: 2,
-      firstName: 'Sue',
-      lastName: 'Corson',
-      email: 'DWhalley@in.gov',
-      phone: '(612)211-6296',
-      address: {
-        streetAddress: '9792 Mattis Ct',
-        city: 'Waukesha',
-        state: 'WI',
-        zip: '22178'
-      },
-      description: 'et lacus magna dolor...',
+const initialState: TableState = {
+  sortDirection: '',
+  sortKey: '',
+  tableData: []
+}
+export const tableReducer = (state = initialState, action: any) => {
+  switch (action.type) {
+    case TableActions.SET_DATA_TABLE: {
+      return {...state, tableData: action.payload}
     }
+    case TableActions.SET_SORT_KEY: {
+      action.payload = action.payload?.toLowerCase()
+      let sortDirection
 
-  ]
-}
-export const tableReducer = (state = initialState, action: any)=>{
-  switch (action.type){
-    default:  return state
+      if (action.payload !== state.sortKey) {
+        sortDirection = 'asc'
+      } else {
+        sortDirection = setSortDirection(state.sortDirection)
+      }
+      return {...state, sortKey: action.payload, sortDirection}
+    }
+    case TableActions.RESET_DB_STORE: {
+      return {...state, ...initialState}
+    }
+    default:
+      return state
   }
 }
+
+export function setSortDirection(sortDirection: string): string {
+  switch (sortDirection) {
+    case 'asc':
+      return 'desc'
+    case 'desc':
+      return ''
+    case '':
+      return 'asc'
+    default:
+      return ''
+  }
+}
+
