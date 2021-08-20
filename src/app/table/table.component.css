@@ -1,0 +1,15 @@
+th {
+  cursor: pointer;
+  user-select: none;
+}
+
+.bi {
+  width: 10px;
+  height: 9px;
+  font-size: 12px;
+  color: rgb(100, 100, 100);
+}
+
+.sort-header-active {
+  color: rgb(219, 109, 6);
+}

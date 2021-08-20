@@ -18,22 +18,22 @@ export const selectTableData =createSelector(
   (state: TableState):any=>state.tableData
 )
 
-export const selectSortedData =createSelector(
+export const selectSortedData = createSelector(
+  selectTableData,
   selectSortDirection,
   selectSortKey,
-  selectTableData,
-  (tableData, sortDirection, sortKey)=>{
-    if(sortDirection===''){
-      return tableData
+  (tableData, sortDirection, sortKey) => {
+    if (sortDirection === '') {
+      return tableData;
     }
-    const sortedData = [...tableData].sort((a,b)=>{
-      const paramA = a[sortKey]
-      const paramB = b[sortKey]
-      return compare(paramA,paramB, sortDirection)
-    })
-    return sortedData
+    const sortedData = [...tableData].sort((a, b) => {
+      const paramA = a[sortKey];
+      const paramB = b[sortKey];
+      return compare(paramA, paramB, sortDirection);
+    });
+    return sortedData;
   }
-)
+);
 
 export function compare(a: any, b: any, sortDirection: string):number{
   if(a>b){

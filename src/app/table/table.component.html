@@ -1,17 +1,30 @@
 <table class="table table-striped">
   <thead>
   <tr>
-    <th scope="col">id</th>
-    <th scope="col">firstName</th>
-    <th scope="col">lastName</th>
-    <th scope="col">email</th>
-    <th scope="col">phone</th>
-    <th scope="col">address</th>
-    <th scope="col">description</th>
+    <th scope="col" *ngFor="let headerItem of headerRow" (click)="onSort(headerItem)">
+      <div class="d-flex">
+        {{ headerItem.displayName }}
+
+        <!-- SORT -->
+        <div class="d-flex flex-column ms-2" *ngIf="headerItem.hasSort">
+          <i
+            class="bi bi-caret-up-fill"
+            [class.sort-header-active]="(sortDirection$ | async) === 'asc' && headerItem.key === (sortKey$ | async)"
+          >
+          </i>
+          <i
+            class="bi bi-caret-down-fill"
+            [class.sort-header-active]="(sortDirection$ | async) === 'desc' && headerItem.key === (sortKey$ | async)"
+          >
+          </i>
+        </div>
+        <!-- SORT -->
+      </div>
+    </th>
   </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let user of users$ | async ; index as i">
+    <tr *ngFor="let user of tableData$ | async ; index as i">
     <td>{{user.id}}</td>
     <td>{{user.firstName}}</td>
     <td>{{user.lastName}}</td>
