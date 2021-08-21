@@ -32,7 +32,8 @@ export class TableComponent implements OnInit {
   public pageSize$!: Observable<number>;
   public collectionSize$!: Observable<number>;
   public currentPage$!: Observable<any>;
-
+  public searchTerm$!: Observable<string>;
+  searchTerm=''
   constructor(private store: Store<iDataTableState>) {}
 
   ngOnInit(): void {
@@ -130,6 +131,7 @@ export class TableComponent implements OnInit {
     this.pageSize$ = this.store.select(dataTableSelectors.selectPageSize);
     this.collectionSize$ = this.store.select(dataTableSelectors.selectCollectionSize);
     this.currentPage$ = this.store.select(dataTableSelectors.selectCurrentPage);
+    this.searchTerm$ = this.store.select(dataTableSelectors.selectSearchTerm);
   }
 
   ngOnDestroy(): void {
@@ -138,6 +140,9 @@ export class TableComponent implements OnInit {
   refreshData(payload:any){
     this.store.dispatch({type: TableActions.SET_PAGE, payload})
   }
+  public searchTermHandler(payload:any){
+    this.store.dispatch({type: TableActions.SET_SEARCH_TERM, payload:payload})
+}
   public onSort(headerItem: iHeaderRowItem): void {
     if (!headerItem.hasSort) {
       return;

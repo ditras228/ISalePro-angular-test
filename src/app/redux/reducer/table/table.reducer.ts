@@ -1,16 +1,19 @@
 import {TableActions} from "./table.actions";
 import {compare} from "./table.selectors";
+import {iUser} from "../../../table/user";
+import {PipeTransform} from "@angular/core";
 
 export const tableNode = 'table'
 
 export interface TableState {
   tableData: any,
-  sortDirection: '',
+  sortDirection: ''
   sortKey: ''
   pageSize:number
   collectionSize: number
-  pageData:any,
+  pageData:any
   page:number
+  searchTerm:string
 }
 
 const initialState: TableState = {
@@ -20,23 +23,25 @@ const initialState: TableState = {
   pageSize: 3,
   collectionSize: 0,
   pageData:[],
-  page: 1
+  page: 1,
+  searchTerm:''
 }
 export const tableReducer = (state = initialState, action: any) => {
-  if (action.type === TableActions.SET_DATA_TABLE) {
-    {
+  switch (action.type) {
+    case TableActions.SET_DATA_TABLE: {
       const data = action.payload
       return {...state, tableData: data, collectionSize: data.length}
     }
-  } else if (action.type === TableActions.SET_PAGE) {
-    {
+    case TableActions.SET_PAGE: {
       const page = action.payload
       return {
         ...state, page, pageData: state.tableData
       }
     }
-  } else if (action.type === TableActions.SET_SORT_KEY) {
-    {
+    case TableActions.SET_SEARCH_TERM:{
+      return {...state, searchTerm: action.payload}
+    }
+    case TableActions.SET_SORT_KEY: {
       const sortKey = action.payload
       let sortDirection;
       if (sortKey !== state.sortKey) {
@@ -49,13 +54,14 @@ export const tableReducer = (state = initialState, action: any) => {
         sortKey,
         sortDirection
       }
+
     }
-  } else if (action.type === TableActions.RESET_DB_STORE) {
-    {
+    case TableActions.RESET_DB_STORE: {
       return {...state, ...initialState}
     }
-  } else {
-    return state
+    default: {
+      return state
+    }
   }
 }
 
