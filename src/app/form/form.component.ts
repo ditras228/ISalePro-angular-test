@@ -1,34 +1,42 @@
-import { Component, OnInit } from '@angular/core';
-import {iUser} from "../table/user";
+import {Component, OnInit} from '@angular/core';
+import {iUser} from "../table/models/user.model";
+import {Store} from "@ngrx/store";
+import {iDataTableState} from "../table/models/data-table.model";
+import {TableActions} from "../redux/reducer/table/table.actions";
+import {API} from "../API";
+import * as dataTableSelectors from "../redux/reducer/table/table.selectors";
+import {Observable} from "rxjs";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css']
 })
+
 export class FormComponent implements OnInit {
-  public user: iUser ={
-    id: 1,
-    firstName: 'Sue',
-    lastName: 'Corson',
-    email: 'DWhalley@in.gov',
-    phone: '(612)211-6296',
-    address: {
-      streetAddress: '9792 Mattis Ct',
-      city: 'Waukesha',
-      state: 'WI',
-      zip: '22178'
-    },
-    description: 'et lacus magna dolor...',
+  constructor(private store: Store<iDataTableState>) {
   }
-  constructor() { }
+
+  public user!: iUser
+  public tableData$!: Observable<any>
+  public isForm$!: Observable<any>
+  public userForm!:FormGroup
+  tableData = []
 
   ngOnInit(): void {
-    this.user={} as iUser
+    this.user = {address: {}} as iUser
+    this.tableData$ = this.store.select(dataTableSelectors.selectTableData);
+    this.tableData$.subscribe(event => this.tableData = event)
+    this.isForm$ =  this.store.select(dataTableSelectors.selectIsForm);
+   // this.userForm=new FormControl({
+   // })
   }
 
-
-  public submitFormHandler(){
+  public submitFormHandler() {
+    this.store.dispatch({type: TableActions.CREATE_NEW_USER, payload: this.user})
+    console.log(this.tableData)
+    API.save(this.tableData)
   }
 
 }

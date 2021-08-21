@@ -1,27 +1,28 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
-// NgRx
-import { Store } from '@ngrx/store';
+import {Store} from '@ngrx/store';
 import {TableActions} from '../redux/reducer/table/table.actions';
 import * as dataTableSelectors from '../redux/reducer/table/table.selectors';
-import {iDataTableState, iHeaderRowItem} from "./data-table.model";
+import {iDataTableState, iHeaderRowItem} from "./models/data-table.model";
+import {iUser} from "./models/user.model";
+import {API} from "../API";
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit {
- // @Input() data!: any[];
-  //@Input() headerRow!: iHeaderRowItem[];
 
-  headerRow : iHeaderRowItem[]= [
-    { displayName: 'ID', key: 'id', hasSort: true    },
-    { displayName: 'firstName', key: 'firstName', hasSort: true },
-    { displayName: 'lastName', key: 'lastName', hasSort: true },
-    { displayName: 'email', key: 'email', hasSort: true },
-    { displayName: 'phone', key: 'phone', hasSort: true },
-    { displayName: 'address', key: 'address', hasSort: false },
-    { displayName: 'description', key: 'description', hasSort: true },
+export class TableComponent implements OnInit {
+  constructor(private store: Store<iDataTableState>) {
+  }
+
+  headerRow: iHeaderRowItem[] = [
+    {displayName: 'ID', key: 'id', hasSort: true},
+    {displayName: 'firstName', key: 'firstName', hasSort: true},
+    {displayName: 'lastName', key: 'lastName', hasSort: true},
+    {displayName: 'email', key: 'email', hasSort: true},
+    {displayName: 'phone', key: 'phone', hasSort: true},
   ];
 
   public sortDirection$!: Observable<string>;
@@ -32,122 +33,59 @@ export class TableComponent implements OnInit {
   public pageSize$!: Observable<number>;
   public collectionSize$!: Observable<number>;
   public currentPage$!: Observable<any>;
-  public searchTerm$!: Observable<string>;
-  searchTerm=''
-  constructor(private store: Store<iDataTableState>) {}
+
+  public isForm$!: Observable<any>;
+
+  searchTerm = ''
 
   ngOnInit(): void {
+    const response = JSON.parse(API.load() || '[]')
+
     // DISPATCH
-    this.store.dispatch({type: TableActions.SET_DATA_TABLE, payload: [
-        {
-          id: 101,
-          firstName: 'sduse',
-          lastName: 'dsda',
-          email: 'DWhalley@in.gov',
-          phone: '(612)211-d6296',
-          address: {
-            streetAddress : '9792 Mattis Ct',
-            city: 'Waukesha',
-            state: 'WI',
-            zip: '22178'
-          },
-          description: 'et lacus mdagna dolor...',
-        },
-        {
-          id: 102,
-          firstName: 'ddue',
-          lastName: 'Corson',
-          email: 'DWhalley@in.gov',
-          phone: '(612)211-6296',
-          address: {
-            streetAddress : '9792 Mattis Ct',
-            city: 'Wauksesha',
-            state: 'WId',
-            zip: '2217s8'
-          },
-          description: 'et lacus magna dolor...',
-        }, {
-          id: 102,
-          firstName: 'ddue',
-          lastName: 'Corson',
-          email: 'DWhalley@in.gov',
-          phone: '(612)211-6296',
-          address: {
-            streetAddress : '9792 Mattis Ct',
-            city: 'Wauksesha',
-            state: 'WId',
-            zip: '2217s8'
-          },
-          description: 'et lacus magna dolor...',
-        }, {
-          id: 102,
-          firstName: 'ddue',
-          lastName: 'Corson',
-          email: 'DWhalley@in.gov',
-          phone: '(612)211-6296',
-          address: {
-            streetAddress : '9792 Mattis Ct',
-            city: 'Wauksesha',
-            state: 'WId',
-            zip: '2217s8'
-          },
-          description: 'et lacus magna dolor...',
-        }, {
-          id: 102,
-          firstName: 'ddue',
-          lastName: 'Corson',
-          email: 'DWhalley@in.gov',
-          phone: '(612)211-6296',
-          address: {
-            streetAddress : '9792 Mattis Ct',
-            city: 'Wauksesha',
-            state: 'WId',
-            zip: '2217s8'
-          },
-          description: 'et lacus magna dolor...',
-        }, {
-          id: 102,
-          firstName: 'ddue',
-          lastName: 'Corson',
-          email: 'DWhalley@in.gov',
-          phone: '(612)211-6296',
-          address: {
-            streetAddress : '9792 Mattis Ct',
-            city: 'Wauksesha',
-            state: 'WId',
-            zip: '2217s8'
-          },
-          description: 'et lacus magna dolor...',
-        },
-        ]
-  });
+
+    this.store.dispatch({
+      type: TableActions.SET_DATA_TABLE, payload: response || []
+    });
 
     // SELECTORS
+
     this.tableData$ = this.store.select(dataTableSelectors.selectSortedData);
     this.sortKey$ = this.store.select(dataTableSelectors.selectSortKey);
     this.sortDirection$ = this.store.select(dataTableSelectors.selectSortDirection);
-
     this.page$ = this.store.select(dataTableSelectors.selectPage);
     this.pageSize$ = this.store.select(dataTableSelectors.selectPageSize);
     this.collectionSize$ = this.store.select(dataTableSelectors.selectCollectionSize);
     this.currentPage$ = this.store.select(dataTableSelectors.selectCurrentPage);
-    this.searchTerm$ = this.store.select(dataTableSelectors.selectSearchTerm);
+    this.isForm$ = this.store.select(dataTableSelectors.selectIsForm);
+  }
+
+  // FUNCTIONS
+  addUserHandler(){
+    this.store.dispatch({type: TableActions.IS_FORM})
+  }
+  clickHandler(payload: iUser) {
+    this.store.dispatch({type: TableActions.SET_CURRENT_USER, payload})
+  }
+
+
+  refreshData(payload: any) {
+    this.store.dispatch({type: TableActions.SET_PAGE, payload})
+  }
+
+
+  searchTermHandler() {
+    this.store.dispatch({type: TableActions.SET_SEARCH_TERM, payload: this.searchTerm})
+  }
+
+  onSort(headerItem: iHeaderRowItem): void {
+    if (!headerItem.hasSort) {
+      return;
+    }
+    const sortKey = headerItem.key;
+    this.store.dispatch({type: TableActions.SET_SORT_KEY, payload: sortKey})
   }
 
   ngOnDestroy(): void {
     this.store.dispatch({type: TableActions.RESET_DB_STORE});
   }
-  refreshData(payload:any){
-    this.store.dispatch({type: TableActions.SET_PAGE, payload})
-  }
-  public searchTermHandler(payload:any){
-    this.store.dispatch({type: TableActions.SET_SEARCH_TERM, payload:payload})
-}
-  public onSort(headerItem: iHeaderRowItem): void {
-    if (!headerItem.hasSort) {
-      return;
-    }
-    const sortKey = headerItem.key;
-    this.store.dispatch({type: TableActions.SET_SORT_KEY, payload: sortKey })
-}
 }

@@ -1,6 +1,11 @@
-Full text search:
-<form action="">
-  <input class="form-control ml-2" type="text" name="searchTerm"  [(ngModel)]="searchTerm" (input)="searchTermHandler(searchTerm)"/>
+<button *ngIf="!(isForm$|async)" class="btn-success w-100 mb-3 mt-4 " (click)="addUserHandler()">Добавить</button>
+<button *ngIf="(isForm$|async)" class="btn-info w-100 mb-3" (click)="addUserHandler()">Скрыть</button>
+<form action="{{searchTermHandler}}">
+  <div class="row mw-100 m-auto">
+  <input class="col-10" type="text" name="searchTerm"  [(ngModel)]="searchTerm"/>
+  <button class="col-2" type="submit">Найти</button>
+  </div>
+
 </form>
 <table class="table table-striped">
   <thead>
@@ -30,19 +35,12 @@ Full text search:
   </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let user of tableData$ | async ; index as i">
+    <tr *ngFor="let user of tableData$ | async ; index as i" (click)="clickHandler(user)">
     <td>{{user.id}}</td>
     <td>{{user.firstName}}</td>
     <td>{{user.lastName}}</td>
     <td>{{user.email}}</td>
     <td>{{user.phone}}</td>
-    <td>
-      {{user.address.streetAddress}}
-      {{user.address.city}}
-      {{user.address.state}}
-      {{user.address.zip}}
-    </td>
-    <td>{{user.description}}</td>
   </tr>
   </tbody>
 </table>

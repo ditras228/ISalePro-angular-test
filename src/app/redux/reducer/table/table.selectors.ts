@@ -1,6 +1,6 @@
 import {createFeatureSelector, createSelector} from "@ngrx/store";
 import {tableNode, TableState} from "./table.reducer";
-import {iUser} from "../../../table/user";
+import {iUser} from "../../../table/models/user.model";
 
 export const selectTableFeature=createFeatureSelector<TableState>(tableNode)
 
@@ -54,18 +54,6 @@ export const selectSortedData = createSelector(
     return sortedData;
   }
 );
-function matches(user:iUser, term: string) {
-  return user.firstName.toLowerCase().includes(term.toLowerCase()) ||
-         user.lastName.toLowerCase().includes(term.toLowerCase()) ||
-         user.email.toLowerCase().includes(term.toLowerCase()) ||
-         user.phone.toLowerCase().includes(term.toLowerCase()) ||
-         user.description.toLowerCase().includes(term.toLowerCase()) ||
-         user.description.toLowerCase().includes(term.toLowerCase()) ||
-         user.address.streetAddress?.toLowerCase().includes(term.toLowerCase()) ||
-         user.address.city?.toLowerCase().includes(term.toLowerCase()) ||
-         user.address.state?.toLowerCase().includes(term.toLowerCase()) ||
-         user.address.zip?.toLowerCase().includes(term.toLowerCase())
-}
 
 export const selectCollectionSize=createSelector(
   selectTableFeature,
@@ -73,8 +61,35 @@ export const selectCollectionSize=createSelector(
 )
 export const selectCurrentPage=createSelector(
   selectTableFeature,
-  (state: TableState):number=>state.pageData
+  (state: TableState):Array<any>=>state.pageData
 )
+export const selectCurrentUser=createSelector(
+  selectTableFeature,
+  (state: TableState):iUser=>state.currentUser
+)
+export const selectIsForm=createSelector(
+  selectTableFeature,
+  (state: TableState):boolean=>state.isForm
+)
+export const selectIsModal=createSelector(
+  selectTableFeature,
+  (state: TableState):boolean=>state.isModal
+)
+function matches(user:iUser, term: string) {
+  const {firstName,lastName,email,phone,description,address}=user
+  const termToLowerCase=term.toLowerCase()
+
+  return firstName.toLowerCase().includes(termToLowerCase) ||
+    lastName.toLowerCase().includes(termToLowerCase) ||
+    email.toLowerCase().includes(termToLowerCase) ||
+    phone.toLowerCase().includes(termToLowerCase) ||
+    description.toLowerCase().includes(termToLowerCase) ||
+    address.streetAddress?.toLowerCase().includes(termToLowerCase) ||
+    address.city?.toLowerCase().includes(termToLowerCase) ||
+    address.state?.toLowerCase().includes(termToLowerCase) ||
+    address.zip?.toLowerCase().includes(termToLowerCase)
+}
+
 export function compare(a: any, b: any, sortDirection: string):number{
   if(a>b){
     return sortDirection==='asc'?1:-1
