@@ -17,12 +17,21 @@ export const selectTableData =createSelector(
   selectTableFeature,
   (state: TableState):any=>state.tableData
 )
-
+export const selectPage=createSelector(
+  selectTableFeature,
+  (state: TableState):number=>state.page
+)
+export const selectPageSize=createSelector(
+  selectTableFeature,
+  (state: TableState):number=>state.pageSize
+)
 export const selectSortedData = createSelector(
   selectTableData,
   selectSortDirection,
   selectSortKey,
-  (tableData, sortDirection, sortKey) => {
+  selectPage,
+  selectPageSize,
+  (tableData, sortDirection, sortKey, page,pageSize) => {
     if (sortDirection === '') {
       return tableData;
     }
@@ -30,11 +39,22 @@ export const selectSortedData = createSelector(
       const paramA = a[sortKey];
       const paramB = b[sortKey];
       return compare(paramA, paramB, sortDirection);
-    });
+    })          .slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize)
+    ;
     return sortedData;
   }
 );
 
+
+
+export const selectCollectionSize=createSelector(
+  selectTableFeature,
+  (state: TableState):number=>state.collectionSize
+)
+export const selectCurrentPage=createSelector(
+  selectTableFeature,
+  (state: TableState):number=>state.pageData
+)
 export function compare(a: any, b: any, sortDirection: string):number{
   if(a>b){
     return sortDirection==='asc'?1:-1

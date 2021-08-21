@@ -1,3 +1,4 @@
+
 <table class="table table-striped">
   <thead>
   <tr>
@@ -8,14 +9,16 @@
         <!-- SORT -->
         <div class="d-flex flex-column ms-2" *ngIf="headerItem.hasSort">
           <i
-            class="bi bi-caret-up-fill"
+            class="arrows"
             [class.sort-header-active]="(sortDirection$ | async) === 'asc' && headerItem.key === (sortKey$ | async)"
           >
+            ▲
           </i>
           <i
-            class="bi bi-caret-down-fill"
+            class="arrows"
             [class.sort-header-active]="(sortDirection$ | async) === 'desc' && headerItem.key === (sortKey$ | async)"
           >
+            ▼
           </i>
         </div>
         <!-- SORT -->
@@ -30,8 +33,16 @@
     <td>{{user.lastName}}</td>
     <td>{{user.email}}</td>
     <td>{{user.phone}}</td>
-    <td>{{user.address}}</td>
+    <td>
+      {{user.address.streetAddress}}
+      {{user.address.city}}
+      {{user.address.state}}
+      {{user.address.zip}}
+    </td>
     <td>{{user.description}}</td>
   </tr>
   </tbody>
 </table>
+<ngb-pagination [collectionSize]="(collectionSize$ | async) || 1"
+                [page]="(page$ | async) || 1" [pageSize]="(pageSize$ | async) || 1" (pageChange)="refreshData($event)">
+</ngb-pagination>

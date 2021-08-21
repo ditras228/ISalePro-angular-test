@@ -8,7 +8,7 @@ import {iDataTableState, iHeaderRowItem} from "./data-table.model";
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.css']
+  styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
  // @Input() data!: any[];
@@ -27,6 +27,11 @@ export class TableComponent implements OnInit {
   public sortDirection$!: Observable<string>;
   public sortKey$!: Observable<string>;
   public tableData$!: Observable<any>;
+
+  public page$!: Observable<number>;
+  public pageSize$!: Observable<number>;
+  public collectionSize$!: Observable<number>;
+  public currentPage$!: Observable<any>;
 
   constructor(private store: Store<iDataTableState>) {}
 
@@ -60,7 +65,59 @@ export class TableComponent implements OnInit {
             zip: '2217s8'
           },
           description: 'et lacus magna dolor...',
-        }
+        }, {
+          id: 102,
+          firstName: 'ddue',
+          lastName: 'Corson',
+          email: 'DWhalley@in.gov',
+          phone: '(612)211-6296',
+          address: {
+            streetAddress : '9792 Mattis Ct',
+            city: 'Wauksesha',
+            state: 'WId',
+            zip: '2217s8'
+          },
+          description: 'et lacus magna dolor...',
+        }, {
+          id: 102,
+          firstName: 'ddue',
+          lastName: 'Corson',
+          email: 'DWhalley@in.gov',
+          phone: '(612)211-6296',
+          address: {
+            streetAddress : '9792 Mattis Ct',
+            city: 'Wauksesha',
+            state: 'WId',
+            zip: '2217s8'
+          },
+          description: 'et lacus magna dolor...',
+        }, {
+          id: 102,
+          firstName: 'ddue',
+          lastName: 'Corson',
+          email: 'DWhalley@in.gov',
+          phone: '(612)211-6296',
+          address: {
+            streetAddress : '9792 Mattis Ct',
+            city: 'Wauksesha',
+            state: 'WId',
+            zip: '2217s8'
+          },
+          description: 'et lacus magna dolor...',
+        }, {
+          id: 102,
+          firstName: 'ddue',
+          lastName: 'Corson',
+          email: 'DWhalley@in.gov',
+          phone: '(612)211-6296',
+          address: {
+            streetAddress : '9792 Mattis Ct',
+            city: 'Wauksesha',
+            state: 'WId',
+            zip: '2217s8'
+          },
+          description: 'et lacus magna dolor...',
+        },
         ]
   });
 
@@ -68,12 +125,19 @@ export class TableComponent implements OnInit {
     this.tableData$ = this.store.select(dataTableSelectors.selectSortedData);
     this.sortKey$ = this.store.select(dataTableSelectors.selectSortKey);
     this.sortDirection$ = this.store.select(dataTableSelectors.selectSortDirection);
+
+    this.page$ = this.store.select(dataTableSelectors.selectPage);
+    this.pageSize$ = this.store.select(dataTableSelectors.selectPageSize);
+    this.collectionSize$ = this.store.select(dataTableSelectors.selectCollectionSize);
+    this.currentPage$ = this.store.select(dataTableSelectors.selectCurrentPage);
   }
 
   ngOnDestroy(): void {
     this.store.dispatch({type: TableActions.RESET_DB_STORE});
   }
-
+  refreshData(payload:any){
+    this.store.dispatch({type: TableActions.SET_PAGE, payload})
+  }
   public onSort(headerItem: iHeaderRowItem): void {
     if (!headerItem.hasSort) {
       return;
