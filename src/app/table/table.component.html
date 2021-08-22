@@ -1,6 +1,6 @@
 <button *ngIf="!(isForm$|async)" class="btn-success w-100 mb-3 mt-4 " (click)="addUserHandler()">Добавить</button>
 <button *ngIf="(isForm$|async)" class="btn-info w-100 mb-3" (click)="addUserHandler()">Скрыть</button>
-<form action="{{searchTermHandler}}">
+<form (submit)="searchTermHandler()">
   <div class="row mw-100 m-auto">
   <input class="col-10" type="text" name="searchTerm"  [(ngModel)]="searchTerm"/>
   <button class="col-2" type="submit">Найти</button>
@@ -44,6 +44,6 @@
   </tr>
   </tbody>
 </table>
-<ngb-pagination [collectionSize]="(collectionSize$ | async) || 1"
+<ngb-pagination  [collectionSize]="(collectionSize$ | async) || 1"
                 [page]="(page$ | async) || 1" [pageSize]="(pageSize$ | async) || 1" (pageChange)="refreshData($event)">
 </ngb-pagination>

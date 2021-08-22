@@ -18,7 +18,7 @@ export class TableComponent implements OnInit {
   }
 
   headerRow: iHeaderRowItem[] = [
-    {displayName: 'ID', key: 'id', hasSort: true},
+    {displayName: 'id', key: 'id', hasSort: true},
     {displayName: 'firstName', key: 'firstName', hasSort: true},
     {displayName: 'lastName', key: 'lastName', hasSort: true},
     {displayName: 'email', key: 'email', hasSort: true},
@@ -32,7 +32,6 @@ export class TableComponent implements OnInit {
   public page$!: Observable<number>;
   public pageSize$!: Observable<number>;
   public collectionSize$!: Observable<number>;
-  public currentPage$!: Observable<any>;
 
   public isForm$!: Observable<any>;
 
@@ -46,16 +45,16 @@ export class TableComponent implements OnInit {
     this.store.dispatch({
       type: TableActions.SET_DATA_TABLE, payload: response || []
     });
+    this.store.dispatch({type: TableActions.SET_PAGE})
 
     // SELECTORS
 
-    this.tableData$ = this.store.select(dataTableSelectors.selectSortedData);
+    this.tableData$ = this.store.select(dataTableSelectors.selectCurrentPage);
     this.sortKey$ = this.store.select(dataTableSelectors.selectSortKey);
     this.sortDirection$ = this.store.select(dataTableSelectors.selectSortDirection);
     this.page$ = this.store.select(dataTableSelectors.selectPage);
     this.pageSize$ = this.store.select(dataTableSelectors.selectPageSize);
     this.collectionSize$ = this.store.select(dataTableSelectors.selectCollectionSize);
-    this.currentPage$ = this.store.select(dataTableSelectors.selectCurrentPage);
     this.isForm$ = this.store.select(dataTableSelectors.selectIsForm);
   }
 
@@ -69,12 +68,13 @@ export class TableComponent implements OnInit {
 
 
   refreshData(payload: any) {
-    this.store.dispatch({type: TableActions.SET_PAGE, payload})
+    this.store.dispatch({type: TableActions.SET_PAGE, payload: payload})
   }
 
 
   searchTermHandler() {
-    this.store.dispatch({type: TableActions.SET_SEARCH_TERM, payload: this.searchTerm})
+    this.store.dispatch({type: TableActions.SET_PAGE, payload: this.searchTerm})
+
   }
 
   onSort(headerItem: iHeaderRowItem): void {
@@ -83,6 +83,7 @@ export class TableComponent implements OnInit {
     }
     const sortKey = headerItem.key;
     this.store.dispatch({type: TableActions.SET_SORT_KEY, payload: sortKey})
+    this.store.dispatch({type: TableActions.SET_PAGE})
   }
 
   ngOnDestroy(): void {

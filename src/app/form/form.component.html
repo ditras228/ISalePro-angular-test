@@ -1,38 +1,34 @@
-<form #userForm *ngIf="(isForm$|async)">
+<form [formGroup]="userForm" *ngIf="(isForm$|async)">
   <div class="form-group">
     <label for="id">id</label>
-    <input id="id" type="number" #id='ngModel' [(ngModel)]="user.id" name="id" class="form-control" required>
-    <div [hidden]="id.valid || !id.touched" class="alert alert-danger">Обязательно</div>
+    <input id="id" type="number" formControlName="id" class="form-control">
+    <div [hidden]="id?.valid || !id?.touched" class="alert alert-danger">Обязательно</div>
   </div>
   <div class="row">
     <div class="col">
       <label for="firstName">firstName</label>
-      <input id="firstName" type="text" #firstName='ngModel' [(ngModel)]="user.firstName" name="firstName"
-             class="form-control" required>
-      <div [hidden]="firstName.valid || !firstName.touched" class="alert alert-danger">Обязательно</div>
+      <input id="firstName" type="text" formControlName="firstName" class="form-control">
+      <div [hidden]="firstName?.valid || !firstName?.touched" class="alert alert-danger">Обязательно</div>
     </div>
 
     <div class="col">
       <label for="lastName">lastName</label>
-      <input id="lastName" type="text" #lastName='ngModel' [(ngModel)]="user.lastName" name="lastName"
-             class="form-control" required>
-      <div [hidden]="lastName.valid || !lastName.touched" class="alert alert-danger">Обязательно</div>
+      <input id="lastName" type="text" formControlName="lastName" class="form-control">
+      <div [hidden]="lastName?.valid || !lastName?.touched" class="alert alert-danger">Обязательно</div>
     </div>
   </div>
 
   <div class="row">
     <div class="col">
       <label for="email">email</label>
-      <input id="email" type="email" #email='ngModel' [(ngModel)]="user.email" name="email" class="form-control"
-             required>
-      <div [hidden]="email.valid || !email.touched" class="alert alert-danger">Обязательно</div>
+      <input id="email" type="email" formControlName="email" class="form-control">
+      <div [hidden]="email?.valid || !email?.touched" class="alert alert-danger">Не валидный email</div>
     </div>
 
     <div class="col">
       <label for="phone">phone</label>
-      <input id="phone" type="number" #phone='ngModel' [(ngModel)]="user.phone" name="phone" class="form-control"
-             required>
-      <div [hidden]="phone.valid || !phone.touched" class="alert alert-danger">Обязательно</div>
+      <input id="phone" type="number" formControlName="phone" class="form-control">
+      <div [hidden]="phone?.valid || !phone?.touched" class="alert alert-danger">Не валидный телефон</div>
     </div>
 
 
@@ -42,40 +38,35 @@
 
     <div class="col">
       <label for="streetAddress">streetAddress</label>
-      <input id="streetAddress" type="text" #streetAddress='ngModel' [(ngModel)]="user.address.streetAddress"
-             name="streetAddress" class="form-control" required>
-      <div [hidden]="streetAddress.valid || !streetAddress.touched" class="alert alert-danger">Обязательно</div>
+      <input id="streetAddress" type="text" formControlName="streetAddress" class="form-control">
+      <div [hidden]="streetAddress?.valid || !streetAddress?.touched" class="alert alert-danger">Обязательно</div>
     </div>
 
     <div class="col">
       <label for="city">city</label>
-      <input id="city" type="text" #city='ngModel' [(ngModel)]="user.address.city" name="city" class="form-control"
-             required>
-      <div [hidden]="city.valid || !city.touched" class="alert alert-danger">Обязательно</div>
+      <input id="city" type="text" formControlName="city" class="form-control">
+      <div [hidden]="city?.valid || !city?.touched" class="alert alert-danger">Обязательно</div>
     </div>
     <div class="form-group">
       <label for="state">state</label>
-      <input id="state" type="text" #state='ngModel' [(ngModel)]="user.address.state" name="state" class="form-control"
-             required>
-      <div [hidden]="state.valid || !state.touched" class="alert alert-danger">Обязательно</div>
+      <input id="state" type="text" formControlName="state" class="form-control">
+      <div [hidden]="state?.valid || !state?.touched" class="alert alert-danger">Обязательно</div>
     </div>
 
     <div class="form-group">
       <label for="zip">zip</label>
-      <input id="zip" type="text" #zip='ngModel' [(ngModel)]="user.address.zip" name="phone" class="form-control"
-             required>
-      <div [hidden]="zip.valid || !zip.touched" class="alert alert-danger">Обязательно</div>
+      <input id="zip" type="text" formControlName="zip" class="form-control">
+      <div [hidden]="zip?.valid || !zip?.touched" class="alert alert-danger">Обязательно</div>
     </div>
 
   </div>
 
   <div class="form-group">
     <label for="description">description</label>
-    <input id="description" type="text" #description='ngModel' [(ngModel)]="user.description" name="description"
-           class="form-control" required>
+    <input id="description" type="text" formControlName="description" class="form-control">
   </div>
 
   <button type="submit" (click)="submitFormHandler(); userForm.reset()" class="btn btn-success w-100 mb-3"
-          [disabled]="userForm">Добавить в таблицу
+          [disabled]="userForm.invalid">Добавить в таблицу
   </button>
 </form>

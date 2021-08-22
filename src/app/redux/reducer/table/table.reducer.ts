@@ -1,5 +1,6 @@
 import {TableActions} from "./table.actions";
 import {iUser} from "../../../table/models/user.model";
+import {compare} from "./table.selectors";
 export const tableNode = 'table'
 
 const initialState: TableState = {
@@ -35,18 +36,52 @@ export const tableReducer = (state = initialState, action: any) => {
     }
 
     case TableActions.SET_PAGE: {
-      const page = action.payload
+      const {sortDirection, tableData,pageSize,sortKey} = state
+      let page= state.page
+      let searchTerm= state.searchTerm
+
+      if(typeof(action.payload)=='string' ){
+        searchTerm=action.payload
+        console.log(typeof(action.payload))
+      }else{
+        page=action.payload || 1
+      }
+
+      if (sortDirection === '') {
+        return {...state,page,searchTerm, pageData: tableData
+          .filter((user:any)=>matches(user, searchTerm))
+          .slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize)};
+      }
+      const sortedData = [...tableData]
+        .sort((a, b) => {
+          const paramA = a[sortKey];
+          const paramB = b[sortKey];
+          return compare(paramA, paramB, sortDirection);
+        })
+        .filter(user=>matches(user, searchTerm))
+        .slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize)
       return {
-        ...state, page, pageData: state.tableData
+        ...state,searchTerm, pageData: sortedData, page
       }
     }
 
-    case TableActions.SET_SEARCH_TERM: {
-      return {...state, searchTerm: action.payload}
-    }
-
     case TableActions.CREATE_NEW_USER: {
-      return {...state, tableData: [...state.tableData, action.payload]}
+      const payload=action.payload
+      const newUser:iUser= {
+        id: payload.id,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        email: payload.email,
+        phone: payload.phone,
+        address: {
+          streetAddress: payload.streetAddress,
+          city: payload.city,
+          state: payload.state,
+          zip: payload.zip,
+        },
+        description: payload.description,
+      }
+      return {...state, tableData: [newUser,...state.tableData]}
     }
 
     case TableActions.SET_SORT_KEY: {
@@ -98,6 +133,25 @@ export function setSortDirection(sortDirection: string): string {
       return '';
   }
 }
+
+function matches(user:iUser, term: string) {
+  if(user && term){
+    const {firstName, lastName, email, phone, description, address} = user
+    const termToLowerCase = term.toLowerCase()
+
+    return firstName.toLowerCase().includes(termToLowerCase) ||
+      lastName.toLowerCase().includes(termToLowerCase) ||
+      email.toLowerCase().includes(termToLowerCase) ||
+      phone.includes(termToLowerCase) ||
+      description.toLowerCase().includes(termToLowerCase) ||
+      address.streetAddress?.toLowerCase().includes(termToLowerCase) ||
+      address.city?.toLowerCase().includes(termToLowerCase) ||
+      address.state?.toLowerCase().includes(termToLowerCase) ||
+      address.zip?.toLowerCase().includes(termToLowerCase)
+  }
+  return null
+}
+
 
 export interface TableState {
   tableData: Array<any>,
