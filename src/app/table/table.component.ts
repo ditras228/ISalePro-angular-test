@@ -6,6 +6,7 @@ import * as dataTableSelectors from '../redux/reducer/table/table.selectors';
 import {iDataTableState, iHeaderRowItem} from "./models/data-table.model";
 import {iUser} from "./models/user.model";
 import {API} from "../API";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-table',
@@ -14,7 +15,7 @@ import {API} from "../API";
 })
 
 export class TableComponent implements OnInit {
-  constructor(private store: Store<iDataTableState>) {
+  constructor(private modalService: NgbModal,private store: Store<iDataTableState>) {
   }
 
   headerRow: iHeaderRowItem[] = [
@@ -34,8 +35,13 @@ export class TableComponent implements OnInit {
   public collectionSize$!: Observable<number>;
 
   public isForm$!: Observable<any>;
+  public isEmpty$!:Observable<boolean>
+
+  public currentUser$!:Observable<iUser>
 
   searchTerm = ''
+
+
 
   ngOnInit(): void {
     const response = JSON.parse(API.load() || '[]')
@@ -56,13 +62,21 @@ export class TableComponent implements OnInit {
     this.pageSize$ = this.store.select(dataTableSelectors.selectPageSize);
     this.collectionSize$ = this.store.select(dataTableSelectors.selectCollectionSize);
     this.isForm$ = this.store.select(dataTableSelectors.selectIsForm);
+    this.isEmpty$ = this.store.select(dataTableSelectors.selectIsEmpty);
+    this.currentUser$ =  this.store.select(dataTableSelectors.selectCurrentUser);
+
+    this.collectionSize$.subscribe(num =>{
+      this.store.dispatch({type: TableActions.IS_EMPTY, payload: !(num > 0)})
+    } )
+
   }
 
   // FUNCTIONS
   addUserHandler(){
     this.store.dispatch({type: TableActions.IS_FORM})
   }
-  clickHandler(payload: iUser) {
+  open(content:any, payload: iUser) {
+    this.modalService.open(content)
     this.store.dispatch({type: TableActions.SET_CURRENT_USER, payload})
   }
 

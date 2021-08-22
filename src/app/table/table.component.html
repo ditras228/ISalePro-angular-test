@@ -34,8 +34,11 @@
     </th>
   </tr>
   </thead>
+  <div *ngIf="(isEmpty$|async)" class="p-3">
+      Записей не найдено
+  </div>
   <tbody>
-    <tr *ngFor="let user of tableData$ | async ; index as i" (click)="clickHandler(user)">
+    <tr *ngFor="let user of tableData$ | async" (click)="open(content, user)">
     <td>{{user.id}}</td>
     <td>{{user.firstName}}</td>
     <td>{{user.lastName}}</td>
@@ -44,6 +47,64 @@
   </tr>
   </tbody>
 </table>
-<ngb-pagination  [collectionSize]="(collectionSize$ | async) || 1"
+<ngb-pagination *ngIf="!(isEmpty$|async)" [collectionSize]="(collectionSize$ | async) || 1"
                 [page]="(page$ | async) || 1" [pageSize]="(pageSize$ | async) || 1" (pageChange)="refreshData($event)">
 </ngb-pagination>
+
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      Выбран пользователь <b>{{(currentUser$| async)?.firstName }}</b>
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="currentUser$">
+    <div class="col">
+      <div class="row">
+        <div class="col">
+          Описание:
+        </div>
+        <div class="col" style="text-align: right">
+          <textarea id="description" cols="30" rows="3">{{(currentUser$| async)?.description}}</textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Адрес проживания:
+        </div>
+        <div class="col" style="text-align: right">
+          <b>{{(currentUser$| async)?.address?.streetAddress }}</b>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Город:
+        </div>
+        <div class="col" style="text-align: right">
+          <b>{{(currentUser$| async)?.address?.city }}</b>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Провинция/штат:
+        </div>
+        <div class="col" style="text-align: right">
+          <b>{{(currentUser$| async)?.address?.state }}</b>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Индекс:
+        </div>
+        <div class="col" style="text-align: right">
+          <b>{{(currentUser$| async)?.address?.zip }}</b>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
+

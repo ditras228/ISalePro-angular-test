@@ -46,6 +46,10 @@ export class FormComponent implements OnInit {
   public submitFormHandler() {
     this.store.dispatch({type: TableActions.CREATE_NEW_USER, payload: this.userForm.value})
     API.save(this.tableData)
+    this.store.dispatch({type: TableActions.SET_PAGE})
+    this.store.dispatch({type: TableActions.IS_EMPTY, payload: false})
+
+
   }
 
   // GETTERS

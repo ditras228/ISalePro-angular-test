@@ -11,10 +11,8 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import {metaReducers, reducers,} from "./redux/reducer";
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { EffectsModule } from '@ngrx/effects';
 import { FormComponent } from './form/form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { ModalComponent } from './modal/modal.component';
 const appModule:Routes=[
   {path: '**', component: AppComponent}
 ]
@@ -23,7 +21,6 @@ const appModule:Routes=[
     AppComponent,
     TableComponent,
     FormComponent,
-    ModalComponent
   ],
   imports: [
     CommonModule,

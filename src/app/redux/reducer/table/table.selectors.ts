@@ -46,6 +46,10 @@ export const selectIsForm=createSelector(
   selectTableFeature,
   (state: TableState):boolean=>state.isForm
 )
+export const selectIsEmpty=createSelector(
+  selectTableFeature,
+  (state: TableState):boolean=>state.isEmpty
+)
 export const selectIsModal=createSelector(
   selectTableFeature,
   (state: TableState):boolean=>state.isModal

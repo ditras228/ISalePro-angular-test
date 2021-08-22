@@ -10,7 +10,7 @@ const initialState: TableState = {
   sortDirection: '',
   sortKey: '',
 
-  pageSize: 3,
+  pageSize: 10,
   collectionSize: 0,
   page: 1,
 
@@ -19,7 +19,8 @@ const initialState: TableState = {
   currentUser: {} as iUser,
 
   isModal: false,
-  isForm: false
+  isForm: false,
+  isEmpty: true
 }
 
 /*
@@ -67,7 +68,7 @@ export const tableReducer = (state = initialState, action: any) => {
 
     case TableActions.CREATE_NEW_USER: {
       const payload=action.payload
-      const newUser:iUser= {
+      const newUser= {
         id: payload.id,
         firstName: payload.firstName,
         lastName: payload.lastName,
@@ -81,7 +82,7 @@ export const tableReducer = (state = initialState, action: any) => {
         },
         description: payload.description,
       }
-      return {...state, tableData: [newUser,...state.tableData]}
+      return {...state, collectionSize: state.tableData.length+1, tableData: [newUser,...state.tableData]}
     }
 
     case TableActions.SET_SORT_KEY: {
@@ -115,6 +116,9 @@ export const tableReducer = (state = initialState, action: any) => {
       return {...state, isForm: !state.isForm}
     }
 
+    case TableActions.IS_EMPTY:{
+      return {...state, isEmpty: action.payload}
+    }
     default: {
       return state
     }
@@ -135,21 +139,15 @@ export function setSortDirection(sortDirection: string): string {
 }
 
 function matches(user:iUser, term: string) {
-  if(user && term){
-    const {firstName, lastName, email, phone, description, address} = user
-    const termToLowerCase = term.toLowerCase()
-
-    return firstName.toLowerCase().includes(termToLowerCase) ||
-      lastName.toLowerCase().includes(termToLowerCase) ||
-      email.toLowerCase().includes(termToLowerCase) ||
-      phone.includes(termToLowerCase) ||
-      description.toLowerCase().includes(termToLowerCase) ||
-      address.streetAddress?.toLowerCase().includes(termToLowerCase) ||
-      address.city?.toLowerCase().includes(termToLowerCase) ||
-      address.state?.toLowerCase().includes(termToLowerCase) ||
-      address.zip?.toLowerCase().includes(termToLowerCase)
-  }
-  return null
+  return user.firstName.toLowerCase().includes(term.toLowerCase()) ||
+    user.lastName.toLowerCase().includes(term.toLowerCase()) ||
+    user.email.toLowerCase().includes(term.toLowerCase()) ||
+    user.phone.toString().includes(term.toLowerCase()) ||
+    user.description?.toLowerCase().includes(term.toLowerCase()) ||
+    user.address.streetAddress?.toLowerCase().includes(term.toLowerCase()) ||
+    user.address.city?.toLowerCase().includes(term.toLowerCase()) ||
+    user.address.state?.toLowerCase().includes(term.toLowerCase()) ||
+    user.address.zip?.toLowerCase().includes(term.toLowerCase())
 }
 
 
@@ -170,4 +168,5 @@ export interface TableState {
 
   isModal: boolean
   isForm: boolean
+  isEmpty: boolean
 }
